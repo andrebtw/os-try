@@ -1,8 +1,8 @@
-NAME            =	os
+NAME            =	boot
 
 
 all:        		$(NAME)
 
 $(NAME):    		
-					nasm boot.asm -f bin -o $(NAME).bin
+					nasm -f bin boot.asm -o $(NAME).bin
 					@echo "\033[32m-- $(NAME) compile and create --\033[0m"
