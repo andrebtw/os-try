@@ -8,7 +8,7 @@ background | foreground | character
 
 void VGA_clear_screen(void)
 {
-    unsigned char *video_buffer = (unsigned char *)VGA_VIDEO_BUFFER_LOCATION;
+    volatile unsigned char *video_buffer = (volatile unsigned char *)VGA_VIDEO_BUFFER_LOCATION;
 
     for (unsigned short i = 0; i < 2000; i++)
     {
@@ -20,7 +20,7 @@ void VGA_clear_screen(void)
 
 void VGA_print_char(unsigned char c, unsigned short x, unsigned short y, unsigned short background_color, unsigned short font_color)
 {
-    unsigned char *video_buffer = (unsigned char *)VGA_VIDEO_BUFFER_LOCATION;
+    volatile unsigned char *video_buffer = (volatile unsigned char *)VGA_VIDEO_BUFFER_LOCATION;
 
     unsigned short buffer_pos = (y * 160) + (x * 2);
     unsigned char color_byte = font_color | background_color << 4;
@@ -34,10 +34,6 @@ void VGA_print_str(unsigned char *str, unsigned short x, unsigned short y, unsig
     if (!str)
         return ;
 
-    unsigned long long buffer_counter = 0;
     for (unsigned long long i = 0; str[i] != '\0'; i++)
-    {
-        VGA_print_char(str[i], x + buffer_counter, y, background_color, font_color);
-        buffer_counter = buffer_counter + 2;
-    }
+        VGA_print_char(str[i], x + i, y, background_color, font_color);
 }

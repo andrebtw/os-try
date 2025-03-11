@@ -39,4 +39,4 @@ fclean:
 re:         		fclean all
 
 run:				
-					qemu-system-x86_64 $(NAME).img
+					qemu-system-i386 -drive file=$(NAME).img,format=raw 
