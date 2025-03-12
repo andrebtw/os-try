@@ -1,4 +1,5 @@
-#include "kernel.h"
+#include "vga_text.h"
+#include "stdint.h"
 
 void main(void)
 {

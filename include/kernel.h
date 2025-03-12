@@ -1,6 +1,6 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-#include "vga_text.h"
+#include "stdint.h"
 
 #endif

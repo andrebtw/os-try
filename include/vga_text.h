@@ -1,6 +1,8 @@
 #ifndef VGATEXT_H
 #define VGATEXT_H
 
+#include "stdint.h"
+
 // VGA mode 3 video buffer
 #define VGA_VIDEO_BUFFER_LOCATION 0xB8000
 
@@ -31,7 +33,6 @@
 void VGA_clear_screen(void);
 
 // Printing
-void VGA_print_char(unsigned char c, unsigned short x, unsigned short y, unsigned short background_color, unsigned short font_color);
-void VGA_print_str(unsigned char *str, unsigned short x, unsigned short y, unsigned short background_color, unsigned short font_color);
-
+void VGA_print_char(uint8 c, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
+void VGA_print_str(uint8 *str, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
 #endif

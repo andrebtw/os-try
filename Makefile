@@ -8,7 +8,7 @@ RM              =   rm -rf
 BUILD_DIR       =   build/
 
 HEADER_DIR = include
-HEADER_FILE = kernel vga_text
+HEADER_FILE = kernel vga_text stdint
 INC = $(addsuffix .h, $(addprefix $(HEADER_DIR)/, $(HEADER_FILE)))
 
 SRC_DIR = src
