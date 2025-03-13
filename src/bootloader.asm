@@ -19,9 +19,14 @@ mov dh, 15
 mov bx, KERNEL_OFFSET
 call load_disk
 
+
+mov ax, 0x2401
+int 0x15
 call enable_protected_mode
 
+
 call KERNEL_OFFSET ; jump to the address of the loaded kernel
+
 
 ;; dl BOOT DRIVER ; dh NB OF SECTORS ; bx ADDRESS BUFFER
 load_disk:
