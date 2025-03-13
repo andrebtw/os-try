@@ -28,11 +28,17 @@
 #define VGA_COLOR_BUFFER 1
 #define VGA_CHARACTER_BUFFER 0
 
+// Screen length
+#define VGA_HEIGHT 80
+#define VGA_LENGTH 25
+
 
 // Clears all the screen with black
-void VGA_clear_screen(void);
+void    VGA_clear_screen(void);
 
 // Printing
-void VGA_print_char(uint8 c, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
-void VGA_print_str(uint8 *str, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
+void    VGA_print_char(uint8 c, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
+void    VGA_print_str(uint8 *str, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
+void    VGA_print_hex_8(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
+
 #endif

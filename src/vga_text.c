@@ -38,3 +38,25 @@ void VGA_print_str(uint8 *str, uint16 x, uint16 y, uint16 background_color, uint
     for (uint64 i = 0; str[i] != '\0'; i++)
         VGA_print_char(str[i], x + i, y, background_color, font_color);
 }
+
+static uint8 convert_to_ascii(uint8 byte)
+{
+    if (byte <= 9)
+        return byte + '0';
+    byte = byte - 10;
+    return byte + 'A';
+}
+
+
+void VGA_print_hex_8(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color)
+{
+    uint8 byte_lowpart = byte & 0x0F;
+    uint8 byte_highpart = (byte & 0xF0) >> 4;
+
+    VGA_print_str("0x", x, y, background_color, font_color);
+    byte_lowpart = convert_to_ascii(byte_lowpart);
+    byte_highpart = convert_to_ascii(byte_highpart);
+
+    VGA_print_char(byte_highpart, x+2, y, background_color, font_color);
+    VGA_print_char(byte_lowpart, x+3, y, background_color, font_color);
+}
