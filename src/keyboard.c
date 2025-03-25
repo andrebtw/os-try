@@ -10,7 +10,7 @@ uint8    read_char(void)
     uint8 status;
 
     status = inb(0x64);
-    while ((status & 0x01) == 0)
+    if ((status & 0x01) == 0)
     {
         status = inb(0x64);
     }

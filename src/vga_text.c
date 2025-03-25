@@ -8,14 +8,14 @@
 background | foreground | character
 */
 
-void VGA_clear_screen(void)
+void VGA_fill_screen(uint8 color)
 {
     volatile uint8 *video_buffer = (volatile uint8 *)VGA_VIDEO_BUFFER_LOCATION;
 
     for (uint16 i = 0; i < 2000; i++)
     {
         video_buffer[VGA_CHARACTER_BUFFER] = ' ';
-        video_buffer[VGA_COLOR_BUFFER] = 0x0F;
+        video_buffer[VGA_COLOR_BUFFER] = (color << 4);
         video_buffer = video_buffer + 2;
     }
 }

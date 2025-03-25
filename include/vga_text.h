@@ -33,8 +33,8 @@
 #define VGA_LENGTH 25
 
 
-// Clears all the screen with black
-void    VGA_clear_screen(void);
+// Fils the screen with desired color
+void    VGA_fill_screen(uint8 color);
 
 // Printing
 void    VGA_print_char(uint8 c, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
