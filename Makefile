@@ -8,11 +8,11 @@ RM              =   rm -rf
 BUILD_DIR       =   build/
 
 HEADER_DIR = include
-HEADER_FILE = kernel vga_text stdint io keyboard debug stdlib/stdlib
+HEADER_FILE = kernel vga_text stdint io keyboard debug stdlib ATA
 INC = $(addsuffix .h, $(addprefix $(HEADER_DIR)/, $(HEADER_FILE)))
 
 SRC_DIR = src
-SRC_FILE = kernel_entry vga_text io keyboard debug stdlib/strlen
+SRC_FILE = kernel_entry vga_text io keyboard debug stdlib/strlen ATA
 SRC = $(addsuffix .c, $(addprefix $(SRC_DIR)/, $(SRC_FILE)))
 
 OBJS = $(SRC:%.c=$(BUILD_DIR)%.o)

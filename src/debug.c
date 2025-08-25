@@ -1,6 +1,6 @@
 #include "debug.h"
 #include "vga_text.h"
-#include "stdlib/stdlib.h"
+#include "stdlib.h"
 
 
 void debug_print(char *string, int8 newline)

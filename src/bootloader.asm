@@ -72,7 +72,19 @@ start_protected_mode:
     mov ebp, 0x90000 ; stack at safe place
     mov esp, ebp 
 
-	ret
+    jmp KERNEL_OFFSET
+
+[BITS 32]
+reboot:
+    cli                     ; Disable interrupts
+    mov al, 0xFE
+    out 0x64, al            ; Send reset command to keyboard controller
+    hlt                     ; Halt in case it didn’t reboot
+    jmp $                   ; Infinite loop (just in case)
+
+
+
+
 
 
 
@@ -259,6 +271,9 @@ disk_error_str:
 
 kernel_loaded_str:
     db 'KERNEL LOADED', 0
+
+after_c_loaded:
+    db 'C loaded anr returned', 0
 
 ;; Variables ;;
 BOOT_DRIVE db 0

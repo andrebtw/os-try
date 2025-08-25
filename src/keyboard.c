@@ -1,7 +1,7 @@
 #include "keyboard.h"
 #include "io.h"
 #include "debug.h"
-#include "stdlib/stdlib.h"
+#include "stdlib.h"
 
 
 uint8    read_char(void)
