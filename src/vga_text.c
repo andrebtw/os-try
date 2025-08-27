@@ -49,7 +49,7 @@ static uint8 convert_to_ascii(uint8 byte)
 }
 
 
-void VGA_print_hex_8(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color)
+void VGA_print_hex_byte(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color)
 {
     uint8 byte_lowpart = byte & 0x0F;
     uint8 byte_highpart = (byte & 0xF0) >> 4;
@@ -60,6 +60,23 @@ void VGA_print_hex_8(uint8 byte, uint16 x, uint16 y, uint16 background_color, ui
 
     VGA_print_char(byte_highpart, x+2, y, background_color, font_color);
     VGA_print_char(byte_lowpart, x+3, y, background_color, font_color);
+}
+
+void    VGA_print_binary_byte(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color)
+{
+    uint8 binary_index = 7;
+    char binary[9];
+
+    binary[8] = '\0';
+    for (uint8 i = 0; i < 8; i++)
+    {
+        binary[binary_index] =  convert_to_ascii(byte % 2);
+        byte = byte / 2;
+        binary_index--;
+    }
+
+    VGA_print_str("0b", x, y, background_color, font_color);
+    VGA_print_str(binary, x+2, y, background_color, font_color);
 }
 
 void    VGA_set_cursor(uint8 x, uint8 y)

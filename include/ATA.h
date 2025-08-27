@@ -1,6 +1,8 @@
 #ifndef ATA_H
 #define ATA_H
 
+#include "stdint.h"
+
 // Data register : read:write pio data bytes
 #define ATA_BASE 0x1F0
 
@@ -11,9 +13,15 @@
 #define ATA_LBA_LOW_PORT ATA_BASE + 3
 #define ATA_LBA_MID_PORT ATA_BASE + 4
 #define ATA_LBA_HIGH_PORT ATA_BASE + 5
-#define ATA_DRIVE_PORT ATA_BASE + 6
-#define ATA_HEAD_PORT ATA_BASE + 6
+#define ATA_DRIVE_HEAD_PORT ATA_BASE + 6
 #define ATA_STATUS_PORT ATA_BASE + 7
 #define ATA_CMD_PORT ATA_BASE + 7
+
+#define ATA_IDENTIFY_CMD 0xEC
+#define ATA_READ_CMD 0x20
+
+// Reads 
+void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer, int *i);
+
 
 #endif

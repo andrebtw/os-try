@@ -39,6 +39,7 @@ void    VGA_fill_screen(uint8 color);
 // Printing
 void    VGA_print_char(uint8 c, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
 void    VGA_print_str(uint8 *str, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
-void    VGA_print_hex_8(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
+void    VGA_print_hex_byte(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
+void    VGA_print_binary_byte(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
 void    VGA_set_cursor(uint8 x, uint8 y);
 #endif
