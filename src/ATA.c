@@ -60,9 +60,18 @@ void    drive_init(void)
 
     for (uint64 i = 0; i < 256; i++)
         buffer[i] = inw(ATA_DATA_PORT);
+    
+    check_bsy();
 }
 
+/*
 
+Todo :
+Clean the code with better names and wait function placements
+I think I should make the buffer uint16?
+Protect the function
+
+*/
 void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
 {
     uint64 buffer_index = 0;
@@ -101,7 +110,14 @@ void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
     }
 }
 
-/* To finish */
+/*
+
+Todo :
+Clean the code with better names and wait function placements
+Being able to write mutiple sectors
+Protect the function
+
+*/
 void    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len)
 {
     uint64 buffer_index = 0;
@@ -123,6 +139,9 @@ void    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len
     for (uint64 i = 0; i < 15; i++)
         status = inb(ATA_STATUS_PORT);
 
+    check_bsy();
+    check_rdy();
+
     // Write command
     outb(ATA_CMD_PORT, ATA_WRITE_CMD);
 
@@ -133,12 +152,13 @@ void    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len
     while (!(inb(ATA_STATUS_PORT) & 0b00001000));
 
     // Write words with outw data port
-    for (uint64 i = 0; i < 256; i++)
+    for (size_t i = 0; i < 256; i++)
     {
-        outw(ATA_DATA_PORT, 0x6969);
+        outw(ATA_DATA_PORT, words[i]);
         asm volatile (".byte 0xEB, 0x00" ::: "memory");   // Tiny delay using jmp opcode
     }
 
     outb(ATA_CMD_PORT, ATA_FLUSH_CMD);
+    check_bsy();
 }
 

@@ -4,7 +4,9 @@
         "shell.h": "c",
         "ata.h": "c",
         "stdint.h": "c",
-        "IDT.C": "cpp"
+        "IDT.C": "cpp",
+        "bitset": "c",
+        "unordered_map": "c"
     },
     "cSpell.words": [
         "idtp",

@@ -8,7 +8,6 @@
 
 void kmain(void)
 {
-    
     outb(0x64, 0xAE); // enables PS/2 port 
     VGA_fill_screen(VGA_BLACK_COLOR);
     // VGA_print_str("Discovering disks...", 0, 0, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
@@ -30,21 +29,9 @@ void kmain(void)
     int i = 0;
     
     drive_init();
-    for (uint32 i = 0; i < 12; i++)
-    {
-        if (j >= 75)
-        {
-            j = 0;
-            k++;
-        }
-        VGA_print_hex_byte(buffer[500 + i], j, k, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
-        j = j + 5;
-    }
-    k++;
-    k++;
+
     j = 0;
-    uint16 words[256];
-    // write_sectors(0, 1, words, 2);
+    
     read_sectors(0, 1, buffer);
     for (uint32 i = 0; i < 12; i++)
     {
@@ -53,9 +40,33 @@ void kmain(void)
             j = 0;
             k++;
         }
-        VGA_print_hex_byte(buffer[500 + i], j, k, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
+        VGA_print_hex_byte(buffer[0 + i], j, k, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
         j = j + 5;
     }
+    uint16 words[256];
+    for (size_t i = 0; i < 256; i++)
+    {
+        words[i] = i;
+    }
+
+    write_sectors(0, 1, words, 2);
+
+    read_sectors(0, 1, buffer);
+
+    k=k+1;
+    j = 0;
+    for (uint32 i = 0; i < 12; i++)
+    {
+        if (j >= 75)
+        {
+            j = 0;
+            k++;
+        }
+        VGA_print_hex_byte(buffer[0 + i], j, k, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
+        j = j + 5;
+    }
+
+
     IDT_Init();
     // VGA_print_hex_byte(buffer[0], 0, 7, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
     
@@ -63,7 +74,6 @@ void kmain(void)
 
     VGA_print_str("THIS EXECUTES", 0, 8, VGA_BLACK_COLOR, VGA_GREEN_COLOR);
 
-    
-    for (;;);
 
+    for (;;);
 }
