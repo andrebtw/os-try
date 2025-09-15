@@ -23,3 +23,8 @@ void outb(uint16 port, uint8 value)
     asm volatile ("outb %0, %1" : : "a"(value), "Nd"(port));
 }
 
+// Write a word to a port
+void outw(uint16 port, uint16 value)
+{
+    asm volatile ("outw %0, %1" : : "a"(value), "Nd"(port));
+}

@@ -19,9 +19,12 @@
 
 #define ATA_IDENTIFY_CMD 0xEC
 #define ATA_READ_CMD 0x20
+#define ATA_WRITE_CMD 0x30
+#define ATA_FLUSH_CMD 0xE7
 
-// Reads 
-void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer, int *i);
-
+// ATA driver
+void    drive_init(void); 
+void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer);
+void    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len);
 
 #endif

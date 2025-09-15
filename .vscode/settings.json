@@ -1,6 +1,14 @@
 {
     "files.associations": {
         "io.h": "c",
-        "shell.h": "c"
-    }
+        "shell.h": "c",
+        "ata.h": "c",
+        "stdint.h": "c",
+        "IDT.C": "cpp"
+    },
+    "cSpell.words": [
+        "idtp",
+        "kmain"
+    ],
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc"
 }

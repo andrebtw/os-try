@@ -3,24 +3,15 @@
         {
             "name": "gcc",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/include/*"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
-            ]
-        },
-        {
-            "name": "gcc",
-            "includePath": [
-                "${workspaceFolder}/**"
             ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ]
+            "intelliSenseMode": "linux-gcc-x86"
         }
     ],
     "version": 4

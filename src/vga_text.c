@@ -31,7 +31,7 @@ void VGA_print_char(uint8 c, uint16 x, uint16 y, uint16 background_color, uint16
     video_buffer[VGA_COLOR_BUFFER + buffer_pos] = color_byte;
 }
 
-void VGA_print_str(uint8 *str, uint16 x, uint16 y, uint16 background_color, uint16 font_color)
+void VGA_print_str(char *str, uint16 x, uint16 y, uint16 background_color, uint16 font_color)
 {
     if (!str)
         return ;

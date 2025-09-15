@@ -56,12 +56,12 @@ enable_protected_mode:
     or eax, 0x1
     mov cr0, eax
 
-    jmp CODE_SEG:start_protected_mode
+    jmp CODE_SEGMENT:start_protected_mode
 
 
 [BITS 32]
 start_protected_mode:
-    mov ax, DATA_SEG
+    mov ax, DATA_SEGMENT
     ; pointing all segments to data segment defined
 	mov ds, ax 
     mov ss, ax
@@ -273,17 +273,16 @@ kernel_loaded_str:
     db 'KERNEL LOADED', 0
 
 after_c_loaded:
-    db 'C loaded anr returned', 0
+    db 'C loaded and returned', 0
 
 ;; Variables ;;
 BOOT_DRIVE db 0
 
 ;; Constants ;;
-;; Address of each GDT segment
-CODE_SEG equ gdt_code - gdt_start
-DATA_SEG equ gdt_data - gdt_start
 
+;; Offset of each GDT segment
+CODE_SEGMENT equ gdt_code - gdt_start
+DATA_SEGMENT equ gdt_data - gdt_start
 
 times 510-($-$$) db 0
 dw 0xaa55
-
