@@ -81,7 +81,7 @@ void    VGA_print_binary_byte(uint8 byte, uint16 x, uint16 y, uint16 background_
 
 void    VGA_set_cursor(uint8 x, uint8 y)
 {
-    uint16 cursor_pos = x + (y * VGA_LENGTH);
+    uint16 cursor_pos = x + (y * VGA_WIDTH);
     outb(0x3D4, 0x0E); // port 0x3d4 (address register) will get higher part of the cursor pos
     outb(0x3D5, (cursor_pos & 0x00FF) >> 8); // gets the left 8 bits of the 16 bit and writes on the address register
     outb(0x3D4, 0x0F); // port 0x3d4 (address register) will get lower part of the cursor pos

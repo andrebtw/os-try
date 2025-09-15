@@ -10,10 +10,10 @@ void debug_print(char *string, int8 newline)
 
     if (!string)
         return ;
-    VGA_print_str(string, x_pos, VGA_LENGTH - i, VGA_BLACK_COLOR, VGA_YELLOW_COLOR);
+    VGA_print_str(string, x_pos, VGA_WIDTH - i, VGA_BLACK_COLOR, VGA_YELLOW_COLOR);
     if (!i)
         i = 6;
-    if (x_pos >= VGA_LENGTH)
+    if (x_pos >= VGA_WIDTH)
         x_pos = 0;
     if (newline)
     {

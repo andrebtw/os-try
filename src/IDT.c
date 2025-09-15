@@ -1,5 +1,5 @@
 #include "stdlib.h"
-#include "IDT.h"
+#include "interrupts.h"
 #include "vga_text.h"
 
 extern void isr0(void);
@@ -24,13 +24,13 @@ uint8   IDT_Init(void)
     {
         IDT_Set(&idt_entries[i], (uint32)isr0);
     }
-
     asm volatile ("lidt %0" : : "m"(idt_p));
     return 0;
 }
 
 void    handler(void)
 {
-    VGA_print_str("DIVIDED BY ZERO", 10, 10, VGA_BLACK_COLOR, VGA_RED_COLOR);
+
+    VGA_print_str("DIVIDED BY ZERO", 0, VGA_HEIGHT - 1, VGA_BLACK_COLOR, VGA_RED_COLOR);
     for (;;);
 }

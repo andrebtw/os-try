@@ -4,7 +4,7 @@
 #include "keyboard.h"
 #include "stdlib.h"
 #include "ATA.h"
-#include "IDT.h"
+#include "interrupts.h"
 
 void kmain(void)
 {

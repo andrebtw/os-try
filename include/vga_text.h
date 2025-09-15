@@ -29,8 +29,11 @@
 #define VGA_CHARACTER_BUFFER 0
 
 // Screen length
-#define VGA_HEIGHT 80
-#define VGA_LENGTH 25
+#define VGA_HEIGHT 25
+#define VGA_WIDTH 80
+
+#define VGA_MAX_HEIGHT VGA_HEIGHT - 1
+#define VGA_MAX_WIDTH VGA_WIDTH - 1
 
 
 // Fils the screen with desired color
@@ -42,4 +45,5 @@ void    VGA_print_str(char *str, uint16 x, uint16 y, uint16 background_color, ui
 void    VGA_print_hex_byte(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
 void    VGA_print_binary_byte(uint8 byte, uint16 x, uint16 y, uint16 background_color, uint16 font_color);
 void    VGA_set_cursor(uint8 x, uint8 y);
+
 #endif

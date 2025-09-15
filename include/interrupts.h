@@ -1,5 +1,5 @@
-#ifndef IDT_H
-#define IDT_H
+#ifndef INTERRUPTS_H
+#define INTERRUPTS_H
 
 #include "stdlib.h"
 

@@ -42,6 +42,13 @@ void    drive_init(void)
     outb(ATA_LBA_HIGH_PORT, 0);
     outb(ATA_DRIVE_HEAD_PORT, 0b11100000);
 
+    // wait 400ns
+    for (uint64 i = 0; i < 15; i++)
+        status = inb(ATA_STATUS_PORT);
+    
+    check_bsy();
+    check_rdy();
+
     // Read command
     outb(ATA_CMD_PORT, ATA_READ_CMD);
 
@@ -55,7 +62,7 @@ void    drive_init(void)
         buffer[i] = inw(ATA_DATA_PORT);
 }
 
-/* THIS DOESNT WORK ALL THE TIMES */
+
 void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
 {
     uint64 buffer_index = 0;
@@ -78,6 +85,12 @@ void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
     
     // Read command
     outb(ATA_CMD_PORT, ATA_READ_CMD);
+
+       // Wait while BSY is 1
+    while ((inb(ATA_STATUS_PORT) & 0b10000000));
+
+    // Wait until DRQ is set to 0
+    while (!(inb(ATA_STATUS_PORT) & 0b00001000));
 
     // Read words with inw data port
     for (uint64 i = 0; i < 256 * sector_count; i++)

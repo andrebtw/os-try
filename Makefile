@@ -14,7 +14,7 @@ HEADER_DIR      = include
 SRC_DIR         = src
 
 # Source files
-HEADER_FILES    = kernel vga_text stdint io keyboard debug stdlib ATA IDT
+HEADER_FILES    = kernel vga_text stdint io keyboard debug stdlib ATA interrupts
 HEADERS         = $(addsuffix .h, $(addprefix $(HEADER_DIR)/, $(HEADER_FILES)))
 
 C_SRC_FILES     = kernel_entry vga_text io keyboard debug stdlib/strlen ATA IDT
