@@ -23,8 +23,12 @@
 #define ATA_FLUSH_CMD 0xE7
 
 // ATA driver
-void    drive_init(void); 
-void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer);
-void    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len);
+int8    drive_init(void); 
+int8    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer);
+int8    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len);
+
+// Err
+#define ERRK_BSY 3
+#define ERRK_DRQ 4
 
 #endif

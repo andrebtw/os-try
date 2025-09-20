@@ -2,7 +2,8 @@
 #include "io.h"
 #include "vga_text.h"
 
-int8    check_bsy(void)
+/* Temporary */
+static int8    check_bsy(void)
 {
     uint32 timeout = 0;
     while (inb(ATA_STATUS_PORT) & 0b10000000 && timeout < 100000)
@@ -13,8 +14,8 @@ int8    check_bsy(void)
         return 1;
     return 0;
 }
-
-int8    check_rdy(void)
+/* Temporary */
+static int8    check_rdy(void)
 {
     uint32 timeout = 0;
     while (!(inb(ATA_STATUS_PORT) & 0b00001000) && timeout < 100000)
@@ -26,7 +27,43 @@ int8    check_rdy(void)
     return 0;
 }
 
-void    drive_init(void)
+static int8    Wait_Until_BSY_Cleared(void)
+{
+    uint32 timeout = 0;
+    while (inb(ATA_STATUS_PORT) & 0b10000000 && timeout < 100000)
+    {
+        timeout++;
+    }
+    if (timeout >= 100000)
+        return 1;
+    return 0;
+}
+
+static int8    Wait_Until_DRQ_Set(void)
+{
+    uint32 timeout = 0;
+    while (!(inb(ATA_STATUS_PORT) & 0b00001000) && timeout < 100000)
+    {
+        timeout++;
+    }
+    if (timeout >= 100000)
+        return 1;
+    return 0;
+}
+
+static int8    Wait_Until_DRQ_Cleared(void)
+{
+    uint32 timeout = 0;
+    while (inb(ATA_STATUS_PORT) & 0b00001000 && timeout < 100000)
+    {
+        timeout++;
+    }
+    if (timeout >= 100000)
+        return 1;
+    return 0;
+}
+
+int8    drive_init(void)
 {
     uint16 buffer[256];
 
@@ -62,6 +99,15 @@ void    drive_init(void)
         buffer[i] = inw(ATA_DATA_PORT);
     
     check_bsy();
+    return 0;
+}
+
+static void Wait_400ns(void)
+{
+    uint8 status;
+
+    for (uint64 i = 0; i < 15; i++)
+        status = inb(ATA_STATUS_PORT);
 }
 
 /*
@@ -72,34 +118,32 @@ I think I should make the buffer uint16?
 Protect the function
 
 */
-void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
+int8   read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
 {
     uint64 buffer_index = 0;
     uint16 data;
 
     uint8 status = inb(ATA_STATUS_PORT);
 
+    // Select lba(sector) and sector count to read
     outb(ATA_SECTORS_COUNT_PORT, sector_count);
     outb(ATA_LBA_LOW_PORT, lba & 0xFF);
     outb(ATA_LBA_MID_PORT, lba >> 8);
     outb(ATA_LBA_HIGH_PORT, lba >> 16);
     outb(ATA_DRIVE_HEAD_PORT, (0b11100000 | (lba >> 24)));
 
-    // wait 400ns
-    for (uint64 i = 0; i < 15; i++)
-        status = inb(ATA_STATUS_PORT);
+    Wait_400ns();
 
-    check_bsy();
-    check_rdy();
-    
-    // Read command
+    if (Wait_Until_BSY_Cleared())
+        return ERRK_BSY;
+
     outb(ATA_CMD_PORT, ATA_READ_CMD);
 
-       // Wait while BSY is 1
-    while ((inb(ATA_STATUS_PORT) & 0b10000000));
+    if (Wait_Until_BSY_Cleared())
+        return ERRK_BSY;
 
-    // Wait until DRQ is set to 0
-    while (!(inb(ATA_STATUS_PORT) & 0b00001000));
+    if (Wait_Until_DRQ_Set())
+        return ERRK_DRQ;
 
     // Read words with inw data port
     for (uint64 i = 0; i < 256 * sector_count; i++)
@@ -108,6 +152,7 @@ void    read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
         buffer[i * 2 + buffer_index] = (uint8)(data & 0xFF);
         buffer[i * 2 + 1 + buffer_index] = (uint8)(data >> 8);
     }
+    return 0;
 }
 
 /*
@@ -118,7 +163,7 @@ Being able to write mutiple sectors
 Protect the function
 
 */
-void    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len)
+int8    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len)
 {
     uint64 buffer_index = 0;
     uint16 data;
@@ -160,5 +205,6 @@ void    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len
 
     outb(ATA_CMD_PORT, ATA_FLUSH_CMD);
     check_bsy();
+    return 0;
 }
 

@@ -32,7 +32,8 @@ void kmain(void)
 
     j = 0;
     
-    read_sectors(0, 1, buffer);
+    if (read_sectors(0, 1, buffer))
+        return ;
     for (uint32 i = 0; i < 12; i++)
     {
         if (j >= 75)
@@ -49,9 +50,9 @@ void kmain(void)
         words[i] = i;
     }
 
-    write_sectors(0, 1, words, 2);
+    // write_sectors(0, 1, words, 2);
 
-    read_sectors(0, 1, buffer);
+    // read_sectors(0, 1, buffer);
 
     k=k+1;
     j = 0;
