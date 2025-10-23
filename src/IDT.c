@@ -2,6 +2,7 @@
 #include "interrupts.h"
 #include "vga_text.h"
 
+extern char *last_err;
 extern void isr0(void);
 
 IDT_descriptor  idt_p;

@@ -131,20 +131,16 @@ int8   read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
     outb(ATA_LBA_MID_PORT, lba >> 8);
     outb(ATA_LBA_HIGH_PORT, lba >> 16);
     outb(ATA_DRIVE_HEAD_PORT, (0b11100000 | (lba >> 24)));
+    outb(ATA_CMD_PORT, ATA_READ_CMD);
 
     Wait_400ns();
 
     if (Wait_Until_BSY_Cleared())
         return ERRK_BSY;
 
-    outb(ATA_CMD_PORT, ATA_READ_CMD);
-
-    if (Wait_Until_BSY_Cleared())
-        return ERRK_BSY;
-
     if (Wait_Until_DRQ_Set())
         return ERRK_DRQ;
-
+    
     // Read words with inw data port
     for (uint64 i = 0; i < 256 * sector_count; i++)
     {
@@ -171,30 +167,22 @@ int8    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len
     uint8 status = inb(ATA_STATUS_PORT);
 
     // Wait for one of BSY or DRQ to be at 0
-    while (status & 0b10000000 || status & 0x00001000)
-        status = inb(ATA_STATUS_PORT);
+    
     
     outb(ATA_SECTORS_COUNT_PORT, sector_count);
     outb(ATA_LBA_LOW_PORT, lba & 0xFF);
     outb(ATA_LBA_MID_PORT, lba >> 8);
     outb(ATA_LBA_HIGH_PORT, lba >> 16);
     outb(ATA_DRIVE_HEAD_PORT, (0b11100000 | (lba >> 24)));
-
-    // wait 400ns
-    for (uint64 i = 0; i < 15; i++)
-        status = inb(ATA_STATUS_PORT);
-
-    check_bsy();
-    check_rdy();
-
-    // Write command
     outb(ATA_CMD_PORT, ATA_WRITE_CMD);
 
-    // Wait while BSY is 1
-    while ((inb(ATA_STATUS_PORT) & 0b10000000));
+    Wait_400ns();
 
-    // Wait until DRQ is set to 0
-    while (!(inb(ATA_STATUS_PORT) & 0b00001000));
+    if (Wait_Until_BSY_Cleared())
+        return ERRK_BSY;
+
+    if (Wait_Until_DRQ_Set())
+        return ERRK_DRQ;
 
     // Write words with outw data port
     for (size_t i = 0; i < 256; i++)
@@ -204,7 +192,6 @@ int8    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len
     }
 
     outb(ATA_CMD_PORT, ATA_FLUSH_CMD);
-    check_bsy();
+
     return 0;
 }
-
