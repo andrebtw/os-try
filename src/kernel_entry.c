@@ -32,11 +32,11 @@ void kmain(void)
     uint32 k = 0;
     int i = 0;
     
-    drive_init();
-
     j = 0;
     
-    err_code = read_sectors(10, 1, buffer);
+    drive_init();
+
+    err_code = read_sectors(5, 1, buffer);
     if (err_code == ERRK_BSY)
     {
         VGA_print_str("BSY timeoutd", 0, 15, VGA_BLACK_COLOR, VGA_YELLOW_COLOR);
@@ -47,7 +47,7 @@ void kmain(void)
         VGA_print_str("DRQ timeoutd", 0, 15, VGA_BLACK_COLOR, VGA_YELLOW_COLOR);
         for (;;);
     }
-    
+
     for (uint32 i = 0; i < 12; i++)
     {
         if (j >= 75)
@@ -55,22 +55,22 @@ void kmain(void)
             j = 0;
             k++;
         }
-        VGA_print_hex_byte(buffer[500 + i], j, k, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
+        VGA_print_hex_byte(buffer[0 + i], j, k, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
         j = j + 5;
     }
 
-    // uint16 words[256];
-    // for (size_t i = 0; i < 256; i++)
-    // {
-    //     words[i] = i;
-    // }
+    uint16 words[256];
+    for (size_t i = 0; i < 256; i++)
+    {
+        words[i] = i;
+    }
 
 
-    // if (write_sectors(0, 1, words, 1))
-    //     return ;
+    if (write_sectors(5, 1, words, 1))
+        return ;
     uint8 buffer2[512];
     
-    err_code = read_sectors(10, 1, buffer2);
+    err_code = read_sectors(5, 1, buffer2);
     if (err_code == ERRK_BSY)
     {
         VGA_print_str("BSY timeoutd", 0, 15, VGA_BLACK_COLOR, VGA_YELLOW_COLOR);
@@ -90,7 +90,7 @@ void kmain(void)
             j = 0;
             k++;
         }
-        VGA_print_hex_byte(buffer2[500 + i], j, k, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
+        VGA_print_hex_byte(buffer2[0 + i], j, k, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
         j = j + 5;
     }
 

@@ -2,29 +2,12 @@
 #include "io.h"
 #include "vga_text.h"
 
-/* Temporary */
-static int8    check_bsy(void)
+static void Wait_400ns(void)
 {
-    uint32 timeout = 0;
-    while (inb(ATA_STATUS_PORT) & 0b10000000 && timeout < 100000)
-    {
-        timeout++;
-    }
-    if (timeout >= 100000)
-        return 1;
-    return 0;
-}
-/* Temporary */
-static int8    check_rdy(void)
-{
-    uint32 timeout = 0;
-    while (!(inb(ATA_STATUS_PORT) & 0b00001000) && timeout < 100000)
-    {
-        timeout++;
-    }
-    if (timeout >= 100000)
-        return 1;
-    return 0;
+    uint8 status;
+
+    for (uint64 i = 0; i < 15; i++)
+        status = inb(ATA_STATUS_PORT);
 }
 
 static int8    Wait_Until_BSY_Cleared(void)
@@ -63,6 +46,16 @@ static int8    Wait_Until_DRQ_Cleared(void)
     return 0;
 }
 
+static int8 Wait_Until_Drive_Ready(void)
+{
+    uint32 timeout = 0;
+    if (Wait_Until_BSY_Cleared())
+        return 1;
+    if (Wait_Until_DRQ_Cleared())
+        return 1;
+    return 0;
+}
+
 int8    drive_init(void)
 {
     uint16 buffer[256];
@@ -79,12 +72,13 @@ int8    drive_init(void)
     outb(ATA_LBA_HIGH_PORT, 0);
     outb(ATA_DRIVE_HEAD_PORT, 0b11100000);
 
-    // wait 400ns
-    for (uint64 i = 0; i < 15; i++)
-        status = inb(ATA_STATUS_PORT);
-    
-    check_bsy();
-    check_rdy();
+    Wait_400ns();
+
+    if (Wait_Until_BSY_Cleared())
+        return ERRK_BSY;
+
+    if (Wait_Until_DRQ_Set())
+        return ERRK_DRQ;
 
     // Read command
     outb(ATA_CMD_PORT, ATA_READ_CMD);
@@ -98,25 +92,13 @@ int8    drive_init(void)
     for (uint64 i = 0; i < 256; i++)
         buffer[i] = inw(ATA_DATA_PORT);
     
-    check_bsy();
+    if (Wait_Until_BSY_Cleared())
+        return ERRK_BSY;
     return 0;
 }
 
-static void Wait_400ns(void)
-{
-    uint8 status;
-
-    for (uint64 i = 0; i < 15; i++)
-        status = inb(ATA_STATUS_PORT);
-}
-
 /*
-
-Todo :
-Clean the code with better names and wait function placements
-I think I should make the buffer uint16?
-Protect the function
-
+works i think
 */
 int8   read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
 {
@@ -124,6 +106,9 @@ int8   read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
     uint16 data;
 
     uint8 status = inb(ATA_STATUS_PORT);
+
+    if (Wait_Until_Drive_Ready())
+        return ERRK_DRQ;
 
     // Select lba(sector) and sector count to read
     outb(ATA_SECTORS_COUNT_PORT, sector_count);
@@ -154,10 +139,7 @@ int8   read_sectors(uint32 lba, uint32 sector_count, uint8 *buffer)
 /*
 
 Todo :
-Clean the code with better names and wait function placements
-Being able to write mutiple sectors
-Protect the function
-
+Should work?
 */
 int8    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len)
 {
@@ -166,9 +148,9 @@ int8    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len
 
     uint8 status = inb(ATA_STATUS_PORT);
 
-    // Wait for one of BSY or DRQ to be at 0
-    
-    
+    if (Wait_Until_Drive_Ready())
+        return ERRK_DRQ;
+
     outb(ATA_SECTORS_COUNT_PORT, sector_count);
     outb(ATA_LBA_LOW_PORT, lba & 0xFF);
     outb(ATA_LBA_MID_PORT, lba >> 8);
@@ -177,9 +159,6 @@ int8    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len
     outb(ATA_CMD_PORT, ATA_WRITE_CMD);
 
     Wait_400ns();
-
-    if (Wait_Until_BSY_Cleared())
-        return ERRK_BSY;
 
     if (Wait_Until_DRQ_Set())
         return ERRK_DRQ;
@@ -190,6 +169,9 @@ int8    write_sectors(uint32 lba, uint32 sector_count, uint16 *words, uint64 len
         outw(ATA_DATA_PORT, words[i]);
         asm volatile (".byte 0xEB, 0x00" ::: "memory");   // Tiny delay using jmp opcode
     }
+
+    if (Wait_Until_BSY_Cleared())
+        return ERRK_BSY;
 
     outb(ATA_CMD_PORT, ATA_FLUSH_CMD);
 
