@@ -32,9 +32,13 @@ OBJS            = $(C_OBJS) $(ASM_OBJS)
 # Default target
 all: $(NAME).img
 
+# Image (so boot disk) size in MB
+IMG_SIZE		= 100
+
 # OS Image
 $(NAME).img: $(BUILD_DIR)bootloader.bin $(BUILD_DIR)kernel.bin
 	@cat $^ > $@
+	@dd if=/dev/zero bs=1M count=$(IMG_SIZE) >> $@ 2>/dev/null
 	@echo "\033[32m 🎉 Compilation successful! 🥳 \033[0m"
 
 # Build the bootloader

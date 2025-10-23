@@ -66,11 +66,11 @@ void kmain(void)
     }
 
 
-    if (write_sectors(5, 1, words, 1))
+    if (write_sectors(15, 1, words, 1))
         return ;
     uint8 buffer2[512];
     
-    err_code = read_sectors(5, 1, buffer2);
+    err_code = read_sectors(15, 1, buffer2);
     if (err_code == ERRK_BSY)
     {
         VGA_print_str("BSY timeoutd", 0, 15, VGA_BLACK_COLOR, VGA_YELLOW_COLOR);
@@ -94,14 +94,11 @@ void kmain(void)
         j = j + 5;
     }
 
-    
-    
     // VGA_print_hex_byte(buffer[0], 0, 7, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
     
     int bfioezj = 8 / 0;
 
     VGA_print_str("THIS EXECUTES", 0, 8, VGA_BLACK_COLOR, VGA_GREEN_COLOR);
-
 
     for (;;);
 }
