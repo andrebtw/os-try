@@ -14,14 +14,14 @@ HEADER_DIR      = include
 SRC_DIR         = src
 
 # Source files
-HEADER_FILES    = kernel vga_text stdint io keyboard debug stdlib ATA interrupts
+HEADER_FILES    = kernel vga_text stdint io keyboard debug stdlib ATA interrupts paging
 HEADERS         = $(addsuffix .h, $(addprefix $(HEADER_DIR)/, $(HEADER_FILES)))
 
-C_SRC_FILES     = kernel_entry vga_text io keyboard debug stdlib/strlen ATA IDT
+C_SRC_FILES     = kernel_entry vga_text io keyboard debug stdlib/strlen ATA IDT vmem/paging
 C_SOURCES       = $(addsuffix .c, $(addprefix $(SRC_DIR)/, $(C_SRC_FILES)))
 
 # Assembly files
-ASM_SRC_FILES   = isr
+ASM_SRC_FILES   = isr vmem/enable_paging.asm
 ASM_SOURCES     = $(addsuffix .asm, $(addprefix $(SRC_DIR)/, $(ASM_SRC_FILES)))
 
 # Object files

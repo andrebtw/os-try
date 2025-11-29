@@ -4,7 +4,7 @@
             "name": "gcc",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include/*"
+                "${workspaceFolder}/include/**"
             ],
             "defines": [
                 "_DEBUG",

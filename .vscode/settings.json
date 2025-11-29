@@ -1,16 +1,18 @@
 {
     "files.associations": {
         "io.h": "c",
+        "ATA.h": "c",
         "shell.h": "c",
         "ata.h": "c",
         "stdint.h": "c",
         "IDT.C": "cpp",
         "bitset": "c",
-        "unordered_map": "c"
+        "unordered_map": "c",
+        "interrupts.h" : "c"
     },
     "cSpell.words": [
         "idtp",
         "kmain"
     ],
-    "C_Cpp.default.compilerPath": "/usr/bin/gcc"
+    "C_Cpp.default.compilerPath": "/opt/homebrew/bin/i686-elf-gcc"
 }

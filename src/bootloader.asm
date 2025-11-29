@@ -24,9 +24,7 @@ mov ax, 0x2401
 int 0x15
 call enable_protected_mode
 
-
 call KERNEL_OFFSET ; jump to the address of the loaded kernel
-
 
 ;; dl BOOT DRIVER ; dh NB OF SECTORS ; bx ADDRESS BUFFER
 load_disk:
@@ -81,11 +79,6 @@ reboot:
     out 0x64, al            ; Send reset command to keyboard controller
     hlt                     ; Halt in case it didn’t reboot
     jmp $                   ; Infinite loop (just in case)
-
-
-
-
-
 
 
 

@@ -1,6 +1,6 @@
-#include "ATA.h"
-#include "io.h"
-#include "vga_text.h"
+#include "../include/ATA.h"
+#include "../include/io.h"
+#include "../include/vga_text.h"
 
 static void Wait_400ns(void)
 {

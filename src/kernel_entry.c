@@ -1,10 +1,10 @@
-#include "vga_text.h"
-#include "stdint.h"
-#include "io.h"
-#include "keyboard.h"
-#include "stdlib.h"
-#include "ATA.h"
-#include "interrupts.h"
+#include "../include/vga_text.h"
+#include "../include/stdint.h"
+#include "../include/io.h"
+#include "../include/keyboard.h"
+#include "../include/stdlib.h"
+#include "../include/ATA.h"
+#include "../include/interrupts.h"
 
 char last_err[50];
 
