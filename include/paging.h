@@ -1,3 +1,6 @@
+#ifndef PAGING_H
+#define PAGING_H
+
 #include "../include/stdlib.h"
 
 void paging_init(void);
@@ -16,3 +19,5 @@ void asm_enable_paging(void);
 #define A_FLAG 0b00100000
 // Page size
 #define PS_FLAG 0b10000000
+
+#endif

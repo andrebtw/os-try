@@ -1,19 +1,36 @@
 #include "../../include/paging.h"
-#include <stddef.h>
 
 uint32 page_directory_entry[1024] __attribute__((aligned(4096)));
-uint32 page_table_entry[1024] __attribute__((aligned(4096)));
 
-void fill_pde(void)
-{
-    page_directory_entry[0] = P_FLAG | RW_FLAG;
-    for (size_t i = 1; i < 1024; i++)
-    {
-        page_directory_entry[i] = 0x0;
-    }
-}
+uint32 page_table_entry0[1024] __attribute__((aligned(4096)));
+uint32 page_table_entry1[1024] __attribute__((aligned(4096)));
+uint32 page_table_entry2[1024] __attribute__((aligned(4096)));
+
 
 void fill_pte(void)
 {
-    
+    // Page table entry 0
+    for (size_t i = 0; i < 1024; i++)
+    {
+        page_table_entry0[i] = i * 4096 | P_FLAG | RW_FLAG;
+    }
+}
+
+
+/* Filling each page directory with only zeros &
+setting page table entry address + flags to each pde */
+void fill_pde(void)
+{
+    for (size_t i = 0; i < 1024; i++)
+    {
+        page_directory_entry[i] = 0x0000;
+    }
+    page_directory_entry[0] = (uint32)page_table_entry0 | P_FLAG | RW_FLAG;
+}
+
+
+void paging_init()
+{
+    fill_pte();
+    fill_pde();
 }
