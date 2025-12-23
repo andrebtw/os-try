@@ -4,7 +4,7 @@ NASM            = nasm
 LD              = i686-elf-ld
 FLAGS           = -ffreestanding -m32 -Wall -Wextra
 NASMFLAGS       = -f elf32
-LDFLAGS         = -T linker.ld -e kmain --oformat binary
+LDFLAGS         = -T linker.ld --oformat binary
 RM              = rm -rf
 
 # Project structure

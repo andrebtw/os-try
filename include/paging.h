@@ -4,7 +4,8 @@
 #include "../include/stdlib.h"
 
 void paging_init(void);
-void asm_enable_paging(void);
+extern void load_pde(uint32 *);
+extern void enable_paging();
 
 // FLAGS //
 // Present flag to know if page is in physical memory
