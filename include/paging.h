@@ -21,4 +21,6 @@ extern void enable_paging();
 // Page size
 #define PS_FLAG 0b10000000
 
+// is used to determine if a page has been written to
+#define D_FLAG 0b
 #endif

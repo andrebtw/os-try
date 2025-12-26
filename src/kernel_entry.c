@@ -6,6 +6,7 @@
 #include "../include/ATA.h"
 #include "../include/interrupts.h"
 #include "../include/tests/drive_tests.h"
+#include "../include/tests/paging_tests.h"
 #include "../include/paging.h"
 
 char last_err[50];
@@ -18,12 +19,12 @@ void kmain(void)
     VGA_fill_screen(VGA_BLACK_COLOR);
 
     drive_init();
-
-    // drive_test();
-
     paging_init();
+    
+    VGA_print_str("OS Initialised.", 0, 10, VGA_BLACK_COLOR, VGA_GREEN_COLOR);
 
-    VGA_print_str("OS Initialised.", 0, 0, VGA_BLACK_COLOR, VGA_GREEN_COLOR);
+    drive_test();
+    paging_tests();
 
     for (;;);
 }

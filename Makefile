@@ -14,10 +14,10 @@ HEADER_DIR      = include
 SRC_DIR         = src
 
 # Source files
-HEADER_FILES    = kernel vga_text stdint io keyboard debug stdlib ATA interrupts paging tests/drive_tests
+HEADER_FILES    = kernel vga_text stdint io keyboard debug stdlib ATA interrupts paging tests/drive_tests tests/paging_tests 
 HEADERS         = $(addsuffix .h, $(addprefix $(HEADER_DIR)/, $(HEADER_FILES)))
 
-C_SRC_FILES     = kernel_entry vga_text io keyboard debug stdlib/strlen ATA IDT vmem/paging tests/drive_tests
+C_SRC_FILES     = kernel_entry vga_text io keyboard debug stdlib/strlen ATA IDT vmem/paging tests/drive_tests tests/paging_tests 
 C_SOURCES       = $(addsuffix .c, $(addprefix $(SRC_DIR)/, $(C_SRC_FILES)))
 
 # Assembly files
@@ -85,4 +85,4 @@ fclean: clean
 re: fclean all
 
 run: $(NAME).img
-	@qemu-system-i386 -hda $(NAME).img
+	@qemu-system-i386 -hda $(NAME).img -M accel=tcg,smm=off -d int -no-reboot -no-shutdown

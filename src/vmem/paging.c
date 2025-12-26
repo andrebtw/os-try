@@ -8,7 +8,7 @@ uint32 page_table_entry2[1024] __attribute__((aligned(4096)));
 
 static void fill_pte(void)
 {
-    // Page table entry 0
+    // Page table entry 0, 1 and 2
     for (size_t i = 0; i < 1024; i++)
     {
         page_table_entry0[i] = i * 4096 | P_FLAG | RW_FLAG;

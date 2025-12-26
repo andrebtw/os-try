@@ -19,7 +19,7 @@ typedef struct __attribute__((packed)) s_idt_entry32
     uint16  address_low; //address of handler
     uint16  selector;
     uint8   zero;
-    uint16  type;
+    uint8   type;
     uint16  address_high; // address of handler
 } IDT_Entry32;
 

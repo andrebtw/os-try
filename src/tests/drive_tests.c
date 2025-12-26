@@ -72,7 +72,4 @@ void drive_test()
     }
 
     // VGA_print_hex_byte(buffer[0], 0, 7, VGA_BLACK_COLOR, VGA_WHITE_COLOR);
-    
-    int bfioezj = 8 / 0;
-
 }

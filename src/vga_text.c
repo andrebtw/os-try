@@ -1,6 +1,6 @@
-#include "vga_text.h"
-#include "stdint.h"
-#include "io.h"
+#include "../include/vga_text.h"
+#include "../include/stdint.h"
+#include "../include/io.h"
 
 /* 0xB8000 is the start of the memory address for VGA text
 80x25 resolution, each character is 16 bit
